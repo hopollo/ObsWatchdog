@@ -1,10 +1,8 @@
 #cs ----------------------------------------------------------------------------
-
- AutoIt Version: 3.3.14.5
  Author:         HoPollo
 
  Script Function:
-	This script make sure your stream is not frozen or with black screen for a long time. (With OBS)
+	This script make sure your stream is not frozen or with black screen. (With OBS)
 #ce ----------------------------------------------------------------------------
 
 #include <MsgBoxConstants.au3>
@@ -13,8 +11,8 @@
 
 Global $colors[] = []
 Global $recheckTimer = 5000
-Global $maxreTry = 5
-Global $waitingScreenColor = 0x1A7FA9
+Global $maxreTry = 5 ; change this if needed
+Global $waitingScreenColor = 0x1A7FA9 ; update this to your waiting screen colors
 Global $i = 1
 
 Requierments()
@@ -47,6 +45,7 @@ Func Start()
 EndFunc
 
 Func Investigate()
+   ; Change this to the position you want to check color (better take if from a part where your logo or something not moving is visible on your waiting scene)
    Local $colorpicked = PixelGetColor(617, 277)
 
    _ArrayAdd($colors, $colorpicked)
@@ -58,23 +57,23 @@ Func Investigate()
 		 Unfreez()
 		 _ArrayDelete($colors, 1)
 	  Else
-		 If $colors[3] = 0x000000 Then
-			Beep(250, 500)
-		 EndIf
+		 If $colors[3] = 0x000000 Then Beep(250, 500)
 		 _ArrayDelete($colors, 1)
 	  EndIf
    EndIf
 EndFunc
 
 Func Unfreez()
+   ; I use only 2 scenes on my streaming pc, so to unfreez my rtmp source i just switch between them.
+   ; you maybe want to replace that to mouseclick in most cases.
    Send("{DOWN}")
    Sleep(1500)
    Send("{UP}")
-   Sleep(2000)
+   Sleep(2000) ; wait to the rtmp to display video
 EndFunc
 
 Func ExitScript()
-   MsgBox(0, "Exit", "Script existing", 5)
+   MsgBox(0, "Exit", "Script exiting", 5)
    Exit
 EndFunc
 
